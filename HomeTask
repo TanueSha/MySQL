@@ -1,0 +1,29 @@
+USE hometask;
+/*
+1. Создайте функцию, которая принимает кол-во сек и формат их в кол-во дней часов.
+Пример: 123456 ->'1 days 10 hours 17 minutes 36 seconds '
+*/
+DELIMITER //
+
+CREATE FUNCTION format_time(seconds INT)
+RETURNS VARCHAR(255)
+DETERMINISTIC
+BEGIN
+    DECLARE days INT;
+    DECLARE hours INT;
+    DECLARE minutes INT;
+    DECLARE remaining_seconds INT;
+    DECLARE result VARCHAR(255);
+
+    SET days = FLOOR(seconds / 86400); -- 1 день = 86400 секунд
+    SET hours = FLOOR((seconds % 86400) / 3600); -- 1 час = 3600 секунд
+    SET minutes = FLOOR((seconds % 3600) / 60); -- 1 минута = 60 секунд
+    SET remaining_seconds = seconds % 60;
+
+    SET result = CONCAT(days, ' days ', hours, ' hours ', minutes, ' minutes ', remaining_seconds, ' seconds');
+    RETURN result;
+END //
+
+DELIMITER ;
+
+SELECT format_time(123456) AS formatted_time;
